@@ -31,7 +31,8 @@ const OLD_REGIME_SLABS: TaxSlab[] = [
   { min: 1500001, max: Infinity, rate: 30 }
 ];
 
-const STANDARD_DEDUCTION = 75000;
+const STANDARD_DEDUCTION = 75000; // For New Regime
+const OLD_REGIME_STANDARD_DEDUCTION = 50000; // For Old Regime
 const SECTION_80C_LIMIT = 150000;
 const SECTION_80CCD_LIMIT = 50000;
 const SECTION_80TTA_LIMIT = 10000;
@@ -151,7 +152,7 @@ export default function Home() {
     const taxableIncome = Math.max(
       0,
       income - 
-      STANDARD_DEDUCTION - 
+      OLD_REGIME_STANDARD_DEDUCTION - 
       Math.min(deductions.section80C + homeLoanDeductions.principal, SECTION_80C_LIMIT) - 
       section80DDeduction - 
       Math.min(deductions.section80CCD, SECTION_80CCD_LIMIT) - 
@@ -779,7 +780,7 @@ export default function Home() {
                 <div className="flex justify-between items-center p-4 bg-[#f7f9f9] rounded-xl border border-[#e5e5e5]">
                   <span className="text-[#536471]">Total Deductions (Old Regime):</span>
                   <span className="font-semibold text-[#0f1419]">₹{(
-                    STANDARD_DEDUCTION + 
+                    OLD_REGIME_STANDARD_DEDUCTION + 
                     Math.min(deductions.section80C, SECTION_80C_LIMIT) + 
                     Math.min(
                       deductions.section80D.self + deductions.section80D.parents,
@@ -853,7 +854,7 @@ export default function Home() {
                       <h4 className="text-md font-semibold text-[#0f1419] mb-3">Old Regime Tax Calculation</h4>
                       <div className="space-y-2 text-sm text-[#536471]">
                         <p>1. Annual Income: ₹{income.toLocaleString()}</p>
-                        <p>2. Standard Deduction: ₹{STANDARD_DEDUCTION.toLocaleString()}</p>
+                        <p>2. Standard Deduction: ₹{OLD_REGIME_STANDARD_DEDUCTION.toLocaleString()}</p>
                         <p>3. Section 80C Deduction: ₹{Math.min(deductions.section80C, SECTION_80C_LIMIT).toLocaleString()}</p>
                         <p>4. Section 80D Deduction: ₹{Math.min(
                           deductions.section80D.self + deductions.section80D.parents,
@@ -863,7 +864,7 @@ export default function Home() {
                         <p>6. HRA Exemption: ₹{calculateHRA().toLocaleString()}</p>
                         <p>7. Home Loan Interest: ₹{Math.min(deductions.homeLoan.interest, 200000).toLocaleString()}</p>
                         <p className="mt-2 font-medium">Total Deductions: ₹{(
-                          STANDARD_DEDUCTION + 
+                          OLD_REGIME_STANDARD_DEDUCTION + 
                           Math.min(deductions.section80C, SECTION_80C_LIMIT) + 
                           Math.min(
                             deductions.section80D.self + deductions.section80D.parents,
@@ -881,7 +882,7 @@ export default function Home() {
                           <p className="font-medium">Tax Slabs Applied:</p>
                           {OLD_REGIME_SLABS.map((slab, index) => {
                             const taxableAmount = Math.min(
-                              Math.max(0, income - STANDARD_DEDUCTION - 
+                              Math.max(0, income - OLD_REGIME_STANDARD_DEDUCTION - 
                                 Math.min(deductions.section80C, SECTION_80C_LIMIT) - 
                                 Math.min(
                                   deductions.section80D.self + deductions.section80D.parents,
@@ -894,7 +895,7 @@ export default function Home() {
                                 deductions.nps - 
                                 deductions.educationLoan - 
                                 Math.min(deductions.homeLoan.interest, 200000) - slab.min),
-                              slab.max === Infinity ? income - STANDARD_DEDUCTION - 
+                              slab.max === Infinity ? income - OLD_REGIME_STANDARD_DEDUCTION - 
                                 Math.min(deductions.section80C, SECTION_80C_LIMIT) - 
                                 Math.min(
                                   deductions.section80D.self + deductions.section80D.parents,
