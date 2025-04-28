@@ -4,21 +4,33 @@ import { useState } from "react";
 import { usePDF } from "react-to-pdf";
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer, PieChart, Pie, Cell, Legend } from 'recharts';
 
-const NEW_REGIME_SLABS = [
+type TaxSlab = {
+  min: number;
+  max: number;
+  rate: number;
+  fixedAmount?: number;
+  surcharge?: number;
+};
+
+const NEW_REGIME_SLABS: TaxSlab[] = [
   { min: 0, max: 400000, rate: 0 },
   { min: 400001, max: 800000, rate: 5 },
   { min: 800001, max: 1200000, rate: 10 },
   { min: 1200001, max: 1600000, rate: 15 },
   { min: 1600001, max: 2000000, rate: 20 },
   { min: 2000001, max: 2400000, rate: 25 },
-  { min: 2400001, max: Infinity, rate: 30 },
+  { min: 2400001, max: Infinity, rate: 30 }
 ];
 
-const OLD_REGIME_SLABS = [
-  { min: 0, max: 250000, rate: 0 },
-  { min: 250001, max: 500000, rate: 5 },
-  { min: 500001, max: 1000000, rate: 20 },
-  { min: 1000001, max: Infinity, rate: 30 },
+const OLD_REGIME_SLABS: TaxSlab[] = [
+  { min: 0, max: 250000, rate: 0, fixedAmount: 0 },
+  { min: 250001, max: 500000, rate: 5, fixedAmount: 0 },
+  { min: 500001, max: 1000000, rate: 20, fixedAmount: 12500 },
+  { min: 1000001, max: 5000000, rate: 30, fixedAmount: 112500 },
+  { min: 5000001, max: 10000000, rate: 30, fixedAmount: 112500, surcharge: 10 },
+  { min: 10000001, max: 20000000, rate: 30, fixedAmount: 112500, surcharge: 15 },
+  { min: 20000001, max: 50000000, rate: 30, fixedAmount: 112500, surcharge: 25 },
+  { min: 50000001, max: Infinity, rate: 30, fixedAmount: 112500, surcharge: 37 }
 ];
 
 const STANDARD_DEDUCTION = 75000;
@@ -93,7 +105,7 @@ export default function Home() {
   };
 
   // Calculate tax based on income and tax slabs
-  const calculateTax = (income: number, slabs: typeof NEW_REGIME_SLABS) => {
+  const calculateTax = (income: number, slabs: typeof NEW_REGIME_SLABS | typeof OLD_REGIME_SLABS) => {
     let totalTax = 0;
     let remainingIncome = income;
 
@@ -104,7 +116,18 @@ export default function Home() {
         remainingIncome,
         slab.max === Infinity ? remainingIncome : slab.max - slab.min + 1
       );
-      totalTax += (taxableAmount * slab.rate) / 100;
+      
+      // Calculate base tax
+      const baseTax = slab.fixedAmount || 0;
+      const rateTax = (taxableAmount * slab.rate) / 100;
+      totalTax += baseTax + rateTax;
+      
+      // Apply surcharge if applicable
+      if ('surcharge' in slab && slab.surcharge) {
+        const surchargeAmount = (totalTax * slab.surcharge) / 100;
+        totalTax += surchargeAmount;
+      }
+      
       remainingIncome -= taxableAmount;
     }
 
