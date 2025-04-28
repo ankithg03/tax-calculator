@@ -305,21 +305,6 @@ export default function Home() {
 
   const COLORS = ['#0088FE', '#00C49F', '#FFBB28', '#FF8042', '#8884D8', '#82CA9D'];
 
-  const calculateTotalDeductions = () => {
-    const total80C = Math.min(deductions.section80C, SECTION_80C_LIMIT);
-    const total80D = Math.min(
-      deductions.section80D.self + 
-      (deductions.section80D.parentsSenior ? 50000 : 25000),
-      SECTION_80D_LIMIT + (deductions.section80D.parentsSenior ? 25000 : 0)
-    );
-    const total80CCD = Math.min(deductions.section80CCD, SECTION_80CCD_LIMIT);
-    const total80TTA = Math.min(deductions.section80TTA, SECTION_80TTA_LIMIT);
-    const total80G = Math.min(deductions.section80G, SECTION_80G_LIMIT);
-    const totalHRA = calculateHRA();
-    const homeLoanDeductions = calculateHomeLoanDeductions();
-
-    return total80C + total80D + total80CCD + total80TTA + total80G + totalHRA + deductions.nps + deductions.educationLoan + homeLoanDeductions.total;
-  };
 
   return (
     <div className="min-h-screen bg-[#ffffff] text-[#0f1419] p-4 md:p-8">
