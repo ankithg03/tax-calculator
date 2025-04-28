@@ -67,6 +67,7 @@ const Navigation = () => {
                 <Link 
                   className="px-4 py-2 mt-2  bg-blue-600 hover:bg-blue-700 rounded-lg transition-colors text-sm flex"
                   onClick={() => setIsMenuOpen(false)}
+                  target="_blank"
                   href={'https://ankithg.vercel.app/'}
                 >
                   Portfolio
