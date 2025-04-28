@@ -1,9 +1,15 @@
 import type { Metadata } from "next";
-import { Inter, Poppins } from "next/font/google";
+import { Inter, Maven_Pro, Quicksand } from "next/font/google";
 import "./globals.css";
+import Navigation from "@/components/Navigation";
 
 const inter = Inter({ subsets: ["latin"], variable: "--font-inter" });
-const poppins = Poppins({ 
+const mavenPro = Maven_Pro({ 
+  weight: ["400", "500", "600", "700"],
+  subsets: ["latin"],
+  variable: "--font-maven-pro"
+});
+const quicksand = Quicksand({ 
   weight: ["400", "500", "600", "700"],
   subsets: ["latin"],
   variable: "--font-poppins"
@@ -21,7 +27,10 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en">
-      <body className={`${inter.variable} ${poppins.variable} font-sans`}>{children}</body>
+      <body className={`${inter.variable} ${mavenPro.variable} ${quicksand.variable} font-sans`}>
+        <Navigation />
+        {children}
+      </body>
     </html>
   );
 }

@@ -328,8 +328,8 @@ export default function Home() {
   return (
     <div className="min-h-screen bg-[#ffffff] text-[#0f1419] p-4 md:p-8">
       <div className="max-w-4xl mx-auto">
-        <div className="bg-white rounded-3xl shadow-xl overflow-hidden border border-[#e5e5e5]">
-          <div className="bg-[#1d9bf0] p-6 text-white">
+        <div className="bg-white shadow-xl overflow-hidden border border-[#e5e5e5]">
+          <div className="bg-[#021522] p-6 text-white">
             <h1 className="text-xl md:text-2xl font-bold text-center tracking-tight">
               Income Tax Calculator FY 2025-26
             </h1>
