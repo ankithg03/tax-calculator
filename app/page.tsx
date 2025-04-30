@@ -102,9 +102,9 @@ export default function Home() {
   };
 
   // Calculate tax based on income and tax slabs
-  const calculateTax = (income: number, slabs: typeof NEW_REGIME_SLABS | typeof OLD_REGIME_SLABS) => {
+  const calculateTax = (income: number, slabs: typeof NEW_REGIME_SLABS | typeof OLD_REGIME_SLABS, isNewRegime: boolean) => {
     let totalTax = 0;
-    let remainingIncome = income;
+    let remainingIncome = income - (isNewRegime ? STANDARD_DEDUCTION : OLD_REGIME_STANDARD_DEDUCTION);
 
     for (const slab of slabs) {
       if (remainingIncome <= 0) break;
@@ -161,7 +161,7 @@ export default function Home() {
       deductions.educationLoan - 
       homeLoanDeductions.interest
     );
-    return calculateTax(taxableIncome, OLD_REGIME_SLABS);
+    return calculateTax(taxableIncome, OLD_REGIME_SLABS, false);
   };
 
   // Handle income change and update tax calculations
@@ -175,7 +175,7 @@ export default function Home() {
       const numValue = parseFloat(value);
       if (!isNaN(numValue)) {
         setIncome(numValue);
-        setNewRegimeTax(calculateTax(numValue, NEW_REGIME_SLABS));
+        setNewRegimeTax(calculateTax(numValue, NEW_REGIME_SLABS, true));
         setOldRegimeTax(calculateOldRegimeTax(numValue));
       }
     }
